@@ -1,0 +1,54 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<!--上下文位置  -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:application-context.xml</param-value>
+	</context-param>
+	<!-- 配置spring 上下文监听 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	 <!-- Springmvc 配置  前端控制器  处理器 映射器  处理器适配器  视图解释器   Handler 处理器自己Controller层
+  	前台  front_page
+  	后台 back_page
+  -->
+  <servlet>
+  	<servlet-name>front</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:springmvc-front.xml</param-value>
+  	</init-param>
+  	<!-- 指定随着Spring容器加载而加载 Tomcat启动就加载 -->
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>front</servlet-name>
+  	<url-pattern>*.shtml</url-pattern>
+  </servlet-mapping>
+  
+    <!-- Springmvc 配置  前端控制器  处理器 映射器  处理器适配器  视图解释器   Handler 处理器自己Controller层
+  	前台  front_page
+  	后台 back_page
+  -->
+  <servlet>
+  	<servlet-name>back</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:springmvc-back.xml</param-value>
+  	</init-param>
+  	<!-- 指定随着Spring容器加载而加载 Tomcat启动就加载 -->
+  	<load-on-startup>2</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>back</servlet-name>
+  	<url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+</web-app>

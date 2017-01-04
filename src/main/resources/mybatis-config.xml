@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+
+<configuration>
+	<!-- setting -->
+	
+	
+	<!-- 事务  连接池  废弃了 -->
+	
+	<!-- 别名  品牌模块手写  -->
+	<typeAliases>
+		<package name="cn.itcast.core.bean"/>
+	</typeAliases>
+	
+	<!-- Mapper所在位置 
+	<mappers>
+	
+	</mappers>
+	-->
+
+</configuration>
