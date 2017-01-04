@@ -21,7 +21,7 @@
 </head>
 <body class="lbody">
 <div class="left">
-<%@ include file="/back_page/date.jsp" %>
+<%@ include file="/WEB-INF/back_page/date.jsp" %>
      <ul class="w-lful">
 		<li><a target="rightFrame" href="order_right.jsp">货到付款</a></li>
 		<li><a target="rightFrame" href="order_right.jsp">待付款</a></li>

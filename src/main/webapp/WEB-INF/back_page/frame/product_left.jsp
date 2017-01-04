@@ -21,7 +21,7 @@
 </head>
 <body class="lbody">
 <div class="left">
-<%@ include file="/back_page/date.jsp" %>
+<%@ include file="/WEB-INF/back_page/date.jsp" %>
      <ul class="w-lful">
 		<li><a href="../product/list.jsp" target="rightFrame">商品管理</a></li>
 		<li><a href="../brand/list.jsp" target="rightFrame">品牌管理</a></li>
