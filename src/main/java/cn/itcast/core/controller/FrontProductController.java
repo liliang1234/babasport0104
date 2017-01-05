@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  */
 @Controller
-public class ProductController {
+public class FrontProductController {
 
 	//第一个Springmvc请求
 	@RequestMapping("/test/index.do")
