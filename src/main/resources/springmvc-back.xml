@@ -19,12 +19,25 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	<!-- 三大组件  映射器 适配器 -->
-	<mvc:annotation-driven/>
+	<mvc:annotation-driven conversion-service="conversionService"/>
 	<!-- 视图解释器 -->
 	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/back_page/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
+	<!-- 去掉前后空格  Converter转换器   参数绑定 -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="cn.itcast.common.convertion.CustomerTrimConverter"/>
+			</list>
+		</property>
+	</bean>
 	
-	
+	<!-- 配置图片上传 -->
+	<!-- 配置Springmvc 上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 上传图片不能大于 1M    B   -->
+		<property name="maxUploadSize" value="1048576"/>
+	</bean>
 </beans>

@@ -7,8 +7,8 @@
 <title>新巴巴运动网-后台首页</title>
 </head>
 <frameset rows="72,*" frameborder="0" border="0" framespacing="0">
-	<frame src="top.jsp" name="topFrame" noresize="noresize" id="leftFrame" />
-	<frame src="main.jsp" name="mainFrame" id="mainFrame" />
+	<frame src="top.do" name="topFrame" noresize="noresize" id="leftFrame" />
+	<frame src="main.do" name="mainFrame" id="mainFrame" />
 </frameset>
 <noframes><body></body></noframes>
 </html>

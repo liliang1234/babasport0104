@@ -4,6 +4,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>babasport-add</title>
+<script type="text/javascript">
+	//上传图片
+	function uploadPic(){
+		var options = {
+			url : "/upload/uploadPic.do",
+			type: "post",
+			dataType:"json",
+			success:function (data){
+				$("#allUrl").attr("src",data.url);
+				$("#path").val(data.path); 
+			}
+		}
+		$("#jvForm").ajaxSubmit(options);
+	}
+</script>
 </head>
 <body>
 <div class="box-positon">
@@ -14,7 +29,7 @@
 	<div class="clear"></div>
 </div>
 <div class="body-box" style="float:right">
-	<form id="jvForm" action="o_save.shtml" method="post" enctype="multipart/form-data">
+	<form id="jvForm" action="/brand/add.do" method="post" enctype="multipart/form-data">
 		<table cellspacing="1" cellpadding="2" width="100%" border="0" class="pn-ftable">
 			<tbody>
 				<tr>
@@ -35,20 +50,21 @@
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h"></td>
 						<td width="80%" class="pn-fcontent">
-						<img width="100" height="100" id="allImgUrl"/>
-						<input type="file" />
+						<img width="100" height="100" id="allUrl"/>
+						<input type="hidden" name="imgUrl" id="path"/>
+						<input type="file" onchange="uploadPic()" name="pic"/>
 					</td>
 				</tr>
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h">
 						品牌描述:</td><td width="80%" class="pn-fcontent">
-						<input type="text" class="required" name="name" maxlength="80"  size="60"/>
+						<input type="text" class="required" name="description" maxlength="80"  size="60"/>
 					</td>
 				</tr>
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h">
 						排序:</td><td width="80%" class="pn-fcontent">
-						<input type="text" class="required" name="name" maxlength="80"/>
+						<input type="text" class="required" name="sort" maxlength="80"/>
 					</td>
 				</tr>
 				<tr>
