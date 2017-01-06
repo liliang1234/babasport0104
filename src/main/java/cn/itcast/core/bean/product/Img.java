@@ -2,6 +2,8 @@ package cn.itcast.core.bean.product;
 
 import java.io.Serializable;
 
+import cn.itcast.core.Constants;
+
 public class Img implements Serializable {
     /**
      * ID
@@ -24,6 +26,9 @@ public class Img implements Serializable {
     private Boolean isDef;
 
     private static final long serialVersionUID = 1L;
+    public String getAllUrl(){
+    	return Constants.IMG_WEB+url;
+    }
 
     public Long getId() {
         return id;

@@ -46,11 +46,26 @@ $(function(){
 				var fck = new FCKeditor("productdesc");
 				fck.BasePath = "/res/fckeditor/";
 				fck.Height = 400 ;
+				//设置上传路径
+				fck.Config["ImageUploadURL"]="/upload/uploadFck.do";
 				fck.ReplaceTextarea();
 			}
 		});
 	});
 });
+//上传图片
+function uploadPic(){
+	var options = {
+		url : "/upload/uploadPic.do",
+		type: "post",
+		dataType:"json",
+		success:function (data){
+			$("#allUrl").attr("src",data.url);
+			$("#path").val(data.path); 
+		}
+	}
+	$("#jvForm").ajaxSubmit(options);
+}
 </script>
 </head>
 <body>
@@ -76,8 +91,9 @@ $(function(){
 						商品类型:</td><td width="80%" class="pn-fcontent">
 								<select name="typeId">
 									<option value="">请选择</option>
-									<option value="2">瑜珈服</option>
-									<option value="3">瑜伽辅助</option>
+									<c:forEach items="${ types }" var="type">
+										<option value="${ type.id }">${ type.name }</option>
+									</c:forEach>
 								</select>
 					</td>
 				</tr>
@@ -93,9 +109,9 @@ $(function(){
 						商品品牌:</td><td width="80%" class="pn-fcontent">
 						<select name="brandId">
 							<option value="">请选择品牌</option>
-							<option value="1">依琦莲</option>
-							<option value="2">凯速（KANSOON）</option>
-							<option value="3">梵歌纳（vangona）</option>
+							<c:forEach items="${ brands }" var="brand">
+								<option value="${ brand.id }">${ brand.name }</option>
+							</c:forEach>
 						</select>
 					</td>
 				</tr>
@@ -120,32 +136,28 @@ $(function(){
 					<td width="20%" class="pn-flabel pn-flabel-h">
 						<span class="pn-frequired">*</span>
 						颜色:</td><td width="80%" class="pn-fcontent">
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
+						<c:forEach items="${ colors }" var="color">
+							<input type="checkbox" value="${color.id }" name="colors"/>${color.name }
+						</c:forEach>
 					</td>
 				</tr>
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h">
 						<span class="pn-frequired">*</span>
 						尺码:</td><td width="80%" class="pn-fcontent">
-						<input type="checkbox" name="size" value="S"/>S
-						<input type="checkbox" name="size" value="M"/>M
-						<input type="checkbox" name="size" value="L"/>L
-						<input type="checkbox" name="size" value="XL"/>XL
-						<input type="checkbox" name="size" value="XXL"/>XXL
+						<input type="checkbox" name="sizes" value="S"/>S
+						<input type="checkbox" name="sizes" value="M"/>M
+						<input type="checkbox" name="sizes" value="L"/>L
+						<input type="checkbox" name="sizes" value="XL"/>XL
+						<input type="checkbox" name="sizes" value="XXL"/>XXL
 					</td>
 				</tr>
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h">
 						状态:</td><td width="80%" class="pn-fcontent">
-						<input type="checkbox" name="isNew" value="1"/>新品
-						<input type="checkbox" name="isCommend" value="1"/>推荐
-						<input type="checkbox" name="isHot" value="1"/>热卖
+						<input type="checkbox" name="isNew" value="true"/>新品
+						<input type="checkbox" name="isCommend" value="true"/>推荐
+						<input type="checkbox" name="isHot" value="true"/>热卖
 					</td>
 				</tr>
 				<tr>
@@ -159,8 +171,8 @@ $(function(){
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h"></td>
 						<td width="80%" class="pn-fcontent">
-						<img width="100" height="100" id="product_url"/>
-						<input type="hidden" name="picPath" id="product_path"/>
+						<img width="100" height="100" id="allUrl"/>
+						<input type="hidden" name="img.url" id="path"/>
 						<input type="file" onchange="uploadPic()" name="pic"/>
 					</td>
 				</tr>

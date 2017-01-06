@@ -103,8 +103,23 @@ public class Product implements Serializable {
      * 审核人ID
      */
     private String checkUserId;
+    
+    /**
+     * 图片包装类
+     */
+    private Img img;
+    
+    
 
-    private static final long serialVersionUID = 1L;
+    public Img getImg() {
+		return img;
+	}
+
+	public void setImg(Img img) {
+		this.img = img;
+	}
+
+	private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
