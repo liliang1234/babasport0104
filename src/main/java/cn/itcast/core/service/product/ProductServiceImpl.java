@@ -1,8 +1,13 @@
 package cn.itcast.core.service.product;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +19,8 @@ import cn.itcast.core.bean.product.ImgQuery;
 import cn.itcast.core.bean.product.Product;
 import cn.itcast.core.bean.product.ProductQuery;
 import cn.itcast.core.bean.product.Sku;
+import cn.itcast.core.bean.product.SkuQuery;
+import cn.itcast.core.bean.product.SkuQuery.Criteria;
 import cn.itcast.core.dao.product.ImgDao;
 import cn.itcast.core.dao.product.ProductDao;
 import cn.itcast.core.dao.product.SkuDao;
@@ -35,6 +42,8 @@ public class ProductServiceImpl implements ProductService {
 	private ImgDao imgDao;
 	@Autowired
 	private SkuDao skuDao;
+	@Autowired
+	private SolrServer solrServer;
 	//返回分页对象
 	public Pagination selectProductWithPage(ProductQuery productQuery){
 		List<Product> products = productDao.selectByExample(productQuery);
@@ -93,5 +102,52 @@ public class ProductServiceImpl implements ProductService {
 		//保存尺码
 		//保存颜色
 		
+	}
+	/**
+	 * 商品上架
+	 * @throws IOException 
+	 * @throws SolrServerException 
+	 */
+	public void isShow(Long [] ids) throws Exception {
+		Product product = null;
+		for (Long id : ids) {
+			product = new Product();
+			product.setId(id);
+			//设置上架
+			product.setIsShow(true);
+			productDao.updateByPrimaryKeySelective(product);
+			Product pro = productDao.selectByPrimaryKey(id);
+			SolrInputDocument inputDocument = new SolrInputDocument();
+			inputDocument.setField("id", id);
+			inputDocument.setField("name_ik", pro.getName());
+			//品牌id
+			inputDocument.setField("brandId", pro.getBrandId());
+			//商品价格
+			SkuQuery example = new SkuQuery();
+			example.createCriteria().andProductIdEqualTo(id);
+			List<Sku> skus = skuDao.selectByExample(example);
+			inputDocument.setField("price", skus.get(0).getPrice());
+			//图片的url
+			ImgQuery iq = new ImgQuery();
+			iq.createCriteria().andProductIdEqualTo(id).andIsDefEqualTo(true);
+			List<Img> imgs = imgDao.selectByExample(iq);
+			inputDocument.setField("url", imgs.get(0).getUrl());
+			
+			
+			//添加时间
+			inputDocument.setField("last_modified", new Date());
+			
+			solrServer.add(inputDocument);
+			solrServer.commit();
+		}
+	}
+	@Override
+	public Product selectProductById(Long id) {
+		Product product = productDao.selectByPrimaryKey(id);
+		ImgQuery example = new ImgQuery();
+		example.createCriteria().andProductIdEqualTo(id).andIsDefEqualTo(true);
+		List<Img> imgs = imgDao.selectByExample(example);
+		product.setImg(imgs.get(0));
+		return product;
 	}
 }

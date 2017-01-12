@@ -108,10 +108,20 @@ public class Product implements Serializable {
      * 图片包装类
      */
     private Img img;
-    
-    
+    /**
+     * 价格
+     */
+    private Float price;
 
-    public Img getImg() {
+	public Float getPrice() {
+		return price;
+	}
+
+	public void setPrice(Float price) {
+		this.price = price;
+	}
+
+	public Img getImg() {
 		return img;
 	}
 

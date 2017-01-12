@@ -24,8 +24,9 @@ import cn.itcast.core.service.product.TypeService;
 
 /**
  * 商品后台
+ * 
  * @author liliang
- *
+ * 
  */
 @Controller
 public class ProductController {
@@ -38,8 +39,10 @@ public class ProductController {
 	private TypeService typeService;
 	@Autowired
 	private ColorService colorService;
+
 	/**
 	 * 商品的查询
+	 * 
 	 * @param pageNo
 	 * @param name
 	 * @param brandId
@@ -47,8 +50,9 @@ public class ProductController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value="/product/list.do")
-	public String list(Integer pageNo ,String name,Long brandId,Boolean isShow,Model model){
+	@RequestMapping(value = "/product/list.do")
+	public String list(Integer pageNo, String name, Long brandId,
+			Boolean isShow, Model model) {
 		BrandQuery bquey = new BrandQuery();
 		bquey.setIsDisplay(1);
 		List<Brand> brands = brandService.selectBrands(bquey);
@@ -58,42 +62,44 @@ public class ProductController {
 		productQuery.setOrderByClause("id desc");
 		Criteria createCriteria = productQuery.createCriteria();
 		StringBuilder params = new StringBuilder();
-		//判断名称
-		if(null != name){
-			createCriteria.andNameLike("%"+name+"%");
+		// 判断名称
+		if (null != name) {
+			createCriteria.andNameLike("%" + name + "%");
 			model.addAttribute("name", name);
 			params.append("name=").append(name);
 		}
-		if(null != brandId){
+		if (null != brandId) {
 			createCriteria.andBrandIdEqualTo(brandId);
 			model.addAttribute("brandId", brandId);
 			params.append("&brandId=").append(brandId);
 		}
-		if(null != isShow){
+		if (null != isShow) {
 			createCriteria.andIsShowEqualTo(isShow);
 			model.addAttribute("isShow", isShow);
 			params.append("&isShow=").append(isShow);
-		}else{
+		} else {
 			createCriteria.andIsShowEqualTo(false);
 			model.addAttribute("isShow", false);
 			params.append("&isShow=").append(false);
 		}
-		Pagination pagination = productService.selectProductWithPage(productQuery);
+		Pagination pagination = productService
+				.selectProductWithPage(productQuery);
 		String url = "/product/list.do";
 		pagination.pageView(url, params.toString());
 		model.addAttribute("brands", brands);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("pageNo", productQuery.getPageNo());
-		
+
 		return "product/list";
 	}
-	@RequestMapping(value="/product/toAdd.do")
-	public String toAdd(Model model){
+
+	@RequestMapping(value = "/product/toAdd.do")
+	public String toAdd(Model model) {
 		BrandQuery bquey = new BrandQuery();
 		bquey.setIsDisplay(1);
 		List<Brand> brands = brandService.selectBrands(bquey);
 		model.addAttribute("brands", brands);
-		//类型
+		// 类型
 		TypeQuery typeQuery = new TypeQuery();
 		typeQuery.createCriteria().andParentIdNotEqualTo(0L);
 		List<Type> types = typeService.selectTypeList(typeQuery);
@@ -104,9 +110,22 @@ public class ProductController {
 		model.addAttribute("colors", colors);
 		return "product/add";
 	}
-	@RequestMapping(value="/product/add.do")
-	public String add(Product product , Model model){
-		productService.addProduct(product);;
+
+	@RequestMapping(value = "/product/add.do")
+	public String add(Product product, Model model) {
+		productService.addProduct(product);
+		;
 		return "redirect:/product/list.do";
 	}
+
+	/**
+	 * 上架状态
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "//product/isShow.do")
+	public String isShow(Long[] ids, Model model) throws Exception {
+		productService.isShow(ids);
+		return "redirect:/product/list.do";
+	}
+
 }
