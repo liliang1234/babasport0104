@@ -10,9 +10,36 @@
 <script src="/res/js/jquery.js"></script>
 <script src="/res/js/com.js"></script>
 <script type="text/javascript">
+//+
+function addProductAmount(skuId,limit){
+	var num = $("#num"+skuId).val();
+	if(num>=limit){
+		alert("此商品只能买"+limit+"件");
+		return;
+	}
+
+	window.location.href="/shopping/buyerCart.shtml?skuId="+skuId+"&amount=1";
+}
+function subProductAmount(skuId){
+	var num = $("#num"+skuId).val();
+	if(num <= 1 ){
+		delProduct(skuId);
+		return;
+	}
+	window.location.href="/shopping/buyerCart.shtml?skuId="+skuId+"&amount=-1";
+}
+//删除
+function delProduct(skuId){
+	if(confirm("你确定删除吗?")){
+		window.location.href="/shooping/delProduct.shtml?skuId="+skuId;
+	}
+}
 //结算
 function trueBuy(){
- 	window.location.href = "productOrder.jsp";
+ 	window.location.href = "/buyer/trueBuy.shtml?returnUrl="+window.location.protocol+"//"+window.location.host+window.location.pathname;
+}
+function clearCart(){
+	window.location.href = "/shopping/clearCart.shtml";
 }
 </script>
 </head>
@@ -40,6 +67,7 @@ function trueBuy(){
 <li title="2.填写核对订单信息">2.填写核对订单信息</li>
 <li title="3.成功提交订单">3.成功提交订单</li>
 </ul>
+<c:if test="${ fn:length(buyerCart.buyerItems)>0 }">
 <div class="w ofc case">
 	<div class="confirm">
 		<div class="tl"></div><div class="tr"></div>
@@ -60,14 +88,14 @@ function trueBuy(){
 			</tr>     
 			</thead>
 			<tbody>
-			
+			<c:forEach items="${ buyerCart.buyerItems }" var="item">
 				<tr>
 					<td class="nwp pic">
 						<ul class="uls">
 							<li>
-								<a class="pic" title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="javascript:void(0)"><img alt=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" src="/res/img/pic/ppp.jpg"></a>
+								<a class="pic" title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="javascript:void(0)"><img alt="" src="${ item.sku.product.img.allUrl }"></a>
 								<dl>
-									<dt><a title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="javascript:void(0)"> 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款--西瓜红--S</a></dt>
+									<dt><a title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="javascript:void(0)">${ item.sku.product.name }--${ item.sku.color.name }--${ item.sku.size }</a></dt>
 									<dd><span class="red">【赠品】</span>
 										<p class="box_d bg_gray2 gray"><a title="瑜伽丝带" href="#">瑜伽丝带</a><br></p>
 									</dd>
@@ -75,54 +103,19 @@ function trueBuy(){
 							</li>
 						</ul>
 					</td>
-					<td>￥333.01</td>
+					<td>￥${ item.sku.price }</td>
 					<td>
-						<a onclick="subProductAmount(503,4)" class="inb arr" title="减" href="javascript:void(0);">-</a>
-						<input type="text" id="num503" readonly="readonly" value="1" name="" size="1" class="txts">
-						<a onclick="addProductAmount(503,4)" class="inb arr" title="加" href="javascript:void(0);">+</a>
-						<dl style="margin-left: 20px;color: red">有货</dl>
+						<a onclick="subProductAmount(${ item.sku.id })" class="inb arr" title="减" href="javascript:void(0);">-</a>
+						<input type="text" id="num${ item.sku.id }" readonly="readonly" value="${ item.amoutnt }" name="" size="1" class="txts">
+						<a onclick="addProductAmount(${ item.sku.id },200)" class="inb arr" title="加" href="javascript:void(0);">+</a>
+						<dl style="margin-left: 20px;color: red">
+						<c:if test="${ item.isStock }">有货</c:if>
+						<c:if test="${ !item.isStock }">无货</c:if>
+						</dl>
 					</td>
-					<td class="blue"><a onclick="delProduct(492)" title="删除" href="javascript:void(0);">删除</a></td>
+					<td class="blue"><a onclick="delProduct('${ item.sku.id }')" title="删除" href="javascript:void(0);">删除</a></td>
 				</tr>
-				
-				<tr>
-					<td class="nwp pic">
-						<ul class="uls">
-							<li>
-								<a class="pic" title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="#"><img alt=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" src="/res/img/pic/ppp1.jpg"></a>
-								<dl>
-									<dt><a title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="#"> 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款--典雅灰--M</a></dt>
-									<dd><span class="red">【赠品】</span>
-										<p class="box_d bg_gray2 gray"><a title="瑜伽丝带" href="#">瑜伽丝带</a><br></p>
-									</dd>
-								</dl>
-							</li>
-						</ul>
-					</td>
-					<td>￥235.0</td>
-					<td><a onclick="subProductAmount(503,4)" class="inb arr" title="减" href="javascript:void(0);">-</a><input type="text" id="num503" readonly="readonly" value="1" name="" size="1" class="txts"><a onclick="addProductAmount(503,4)" class="inb arr" title="加" href="javascript:void(0);">+</a></td>
-					<td class="blue"><a onclick="delProduct(503)" title="删除" href="javascript:void(0);">删除</a></td>
-				</tr>
-				
-				<tr>
-					<td class="nwp pic">
-						<ul class="uls">
-							<li>
-								<a class="pic" title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="#"><img alt=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" src="/res/img/pic/ppp2.jpg"></a>
-								<dl>
-									<dt><a title=" 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款" href="#"> 喜悦2014秋冬新款瑜伽服三件套装 韩版女士瑜珈舞蹈服 愈加服正品送胸垫 酒红+黑+黑 M 开启年终大促 全场优惠到底 买贵就赔 支持货到付款--草绿--XL</a></dt>
-									<dd><span class="red">【赠品】</span>
-										<p class="box_d bg_gray2 gray"><a title="瑜伽丝带" href="#">瑜伽丝带</a><br></p>
-									</dd>
-								</dl>
-							</li>
-						</ul>
-					</td>
-					<td>￥121.0</td>
-					<td><a onclick="subProductAmount(500,1)" class="inb arr" title="减" href="javascript:void(0);">-</a><input type="text" id="num500" readonly="readonly" value="1" name="" size="1" class="txts"><a onclick="addProductAmount(500,1)" class="inb arr" title="加" href="javascript:void(0);">+</a></td>
-					<td class="blue"><a onclick="delProduct(500)" title="删除" href="javascript:void(0);">删除</a></td>
-				</tr>
-				           
+				</c:forEach>
 			</tbody>
 			</table>
 			<div class="page">
@@ -132,10 +125,10 @@ function trueBuy(){
 				</span>
 				<span class="r box_gray">
 					<dl class="total">
-						<dt>购物车金额小计：<cite>(共<var id="productAmount">3</var>个商品)</cite></dt>
-						<dd><em class="l">商品金额：</em>￥<var id="productPrice">689.01</var>元</dd>
-						<dd><em class="l">运费：</em>￥<var id="fee">0.0</var>元</dd>
-						<dd class="orange"><em class="l">应付总额：</em>￥<var id="totalPrice">689.01</var>元</dd>
+						<dt>购物车金额小计：<cite>(共<var id="productAmount">${ buyerCart.productAmoutnt }</var>个商品)</cite></dt>
+						<dd><em class="l">商品金额：</em>￥<var id="productPrice">${ buyerCart.productPrice }</var>元</dd>
+						<dd><em class="l">运费：</em>￥<var id="fee">${ buyerCart.fee }</var>元</dd>
+						<dd class="orange"><em class="l">应付总额：</em>￥<var id="totalPrice">${ buyerCart.totalPrice }</var>元</dd>
 						<dd class="alg_c"><input type="button" onclick="trueBuy();" class="hand btn136x36a" value="结算" id="settleAccountId"></dd>
 					</dl>
 				</span>
@@ -143,7 +136,9 @@ function trueBuy(){
 		</div>
 	</div>
 </div>
-<div class="w ofc case" style="display: none;">
+</c:if>
+<c:if test="${ fn:length(buyerCart.buyerItems)==0 }">
+<div class="w ofc case">
 	<div class="confirm">
 		<div class="tl"></div><div class="tr"></div>
 		<div class="ofc pb40" style="text-align: center;height: 200px;margin-top: 80px">
@@ -151,6 +146,7 @@ function trueBuy(){
 		</div>
 	</div>
 </div>
+</c:if>
 <div class="mode">
 	<div class="tl"></div><div class="tr"></div>
 	<ul class="uls">

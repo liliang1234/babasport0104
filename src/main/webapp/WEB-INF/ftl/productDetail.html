@@ -1,7 +1,3 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
 <meta http-equiv="pragma" content="no-cache">
@@ -9,6 +5,7 @@
 <meta http-equiv="expires" content="0">    
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
+<meta charset="UTF-8">
 
 
 <title>新巴巴运动网-商品详情页</title>
@@ -46,7 +43,6 @@ $(function(){
 	$("#colors a:first").trigger("click");
 });
 var colorId;
-var skuId;
 //点击颜色
 function colorToRed(target,id){
 	colorId=id;
@@ -58,19 +54,18 @@ function colorToRed(target,id){
 	});
 	$(target).attr("class","changToRed");
 	var flat = 0;
-	<c:forEach items="${ skus }" var="sku">
+	<#list skus as sku>
 		if('${sku.colorId}'==id){
 			if(flat == 0){
 				$("#"+'${sku.size}').attr("class","changToRed");
 				$("#price").html("￥"+'${sku.price}');
 				$("#mPrice").html("￥"+'${sku.marketPrice}');
-				skuId=${sku.id};
 			}else{
 				$("#"+'${sku.size}').attr("class","changToWhite");
 			}
 			flat =1;
 		}
-	</c:forEach>
+	</#list>
 }
 function sizeToRed(target,id){
 	var cc = $(target).attr("class");
@@ -84,13 +79,12 @@ function sizeToRed(target,id){
 		}
 	});
 	$(target).attr("class","changToRed");
-	<c:forEach items="${ skus }" var="sku">
+	<#list skus as sku>
 	if('${sku.colorId}'==colorId && '${sku.size}'==id){
 		$("#price").html("￥"+'${sku.price}');
 		$("#mPrice").html("￥"+'${sku.marketPrice}');
-		skuId=${sku.id};
 	}
-</c:forEach>
+	</#list>
 }
 //加入购物车
 function addCart(){
@@ -98,7 +92,7 @@ function addCart(){
 }
 //立即购买
 function buy(){
-	window.location.href='/shopping/buyerCart.shtml?skuId='+skuId+'&amount='+$("#num").val();
+	window.location.href='cart.jsp';
 }
 </script>
 </head>
@@ -204,9 +198,9 @@ function buy(){
 			<li><label>库　　存：</label><span class="word" id="stockInventory">100</span><span class="word" >件</span></li>
 			<li><label>选择颜色：</label>
 				<div id="colors" class="pre spec">
-					<c:forEach items="${ colors }" var="color">
+					<#list colors as color>
 						<a onclick="colorToRed(this,'${color.id }')" href="javascript:void(0)" title="${ color.name }" class="changToWhite"><img width="25" height="25" data-img="1" src="/res/img/pic/ppp00.jpg" alt="${ color.name } "><i>${ color.name }</i></a>
-					</c:forEach>
+					</#list>
 				</div>
 			</li>
 			<li id="sizes"><label>尺　　码：</label>

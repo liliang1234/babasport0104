@@ -2,7 +2,11 @@ package cn.itcast.core.service.product;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import redis.clients.jedis.Jedis;
 import cn.itcast.common.page.Pagination;
+import cn.itcast.core.bean.product.Color;
 import cn.itcast.core.bean.product.Img;
 import cn.itcast.core.bean.product.ImgQuery;
 import cn.itcast.core.bean.product.Product;
@@ -24,6 +29,7 @@ import cn.itcast.core.bean.product.SkuQuery.Criteria;
 import cn.itcast.core.dao.product.ImgDao;
 import cn.itcast.core.dao.product.ProductDao;
 import cn.itcast.core.dao.product.SkuDao;
+import cn.itcast.core.service.staticpage.StaticPageService;
 
 /**
  * 商品管理
@@ -44,6 +50,10 @@ public class ProductServiceImpl implements ProductService {
 	private SkuDao skuDao;
 	@Autowired
 	private SolrServer solrServer;
+	@Autowired
+	private StaticPageService staticPageService;
+	@Autowired
+	private SkuService skuService;
 	//返回分页对象
 	public Pagination selectProductWithPage(ProductQuery productQuery){
 		List<Product> products = productDao.selectByExample(productQuery);
@@ -139,6 +149,22 @@ public class ProductServiceImpl implements ProductService {
 			
 			solrServer.add(inputDocument);
 			solrServer.commit();
+			
+			
+			Map<String, Object> rootMap = new HashMap<String, Object>();
+			//查询商品
+			Product pp = selectProductById(id);
+			rootMap.put("product", pp);
+			//查询有库存的sku
+			List<Sku> ss = skuService.selectSkuListByProductIdAndStock(id);
+			rootMap.put("skus", ss);
+			Set<Color> colors = new HashSet<Color>();
+			for (Sku sku : ss) {
+				colors.add(sku.getColor());
+			}
+			rootMap.put("colors", colors);
+			//静态化页面
+			staticPageService.index(rootMap, id);
 		}
 	}
 	@Override

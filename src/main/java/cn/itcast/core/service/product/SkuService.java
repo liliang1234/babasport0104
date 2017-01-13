@@ -11,4 +11,8 @@ public interface SkuService {
 	public void update(Sku sku);
 	
 	public List<Sku> selectSkuListByProductIdAndStock(Long productId);
+	
+	public Sku selectSkuById(Long id);
+	
+	public Sku selectById(Long skuId);
 }

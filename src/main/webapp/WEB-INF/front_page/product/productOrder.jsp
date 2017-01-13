@@ -52,7 +52,7 @@ $(function(){
 	<h2 class="h2 h2_r mt"><em title="收货人信息">收货人信息      [<a href="#"><font style="color:blue;">修改</font></a>]</em><cite></cite></h2>
 	<div class="box bg_white">
 		<dl class="distr">
-			<dd>范冰冰   13888888888 <span style="margin-left: 30px">北京海淀区西三旗 XXXXXXXXXXXXXXXXXXXXXXXXXXX</span></dd>
+			<dd>${ addr.name }   ${ addr.phone } <span style="margin-left: 30px">${ addr.city } ${ addr.addr }</span></dd>
 		</dl>
 	</div>
 	

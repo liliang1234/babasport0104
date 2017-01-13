@@ -1,7 +1,3 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
 <meta http-equiv="pragma" content="no-cache">
@@ -9,6 +5,7 @@
 <meta http-equiv="expires" content="0">    
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
+<meta charset="UTF-8">
 
 
 <title>新巴巴运动网-商品详情页</title>
@@ -46,7 +43,6 @@ $(function(){
 	$("#colors a:first").trigger("click");
 });
 var colorId;
-var skuId;
 //点击颜色
 function colorToRed(target,id){
 	colorId=id;
@@ -58,19 +54,26 @@ function colorToRed(target,id){
 	});
 	$(target).attr("class","changToRed");
 	var flat = 0;
-	<c:forEach items="${ skus }" var="sku">
-		if('${sku.colorId}'==id){
+			if('10'==id){
 			if(flat == 0){
-				$("#"+'${sku.size}').attr("class","changToRed");
-				$("#price").html("￥"+'${sku.price}');
-				$("#mPrice").html("￥"+'${sku.marketPrice}');
-				skuId=${sku.id};
+				$("#"+'M').attr("class","changToRed");
+				$("#price").html("￥"+'12');
+				$("#mPrice").html("￥"+'21');
 			}else{
-				$("#"+'${sku.size}').attr("class","changToWhite");
+				$("#"+'M').attr("class","changToWhite");
 			}
 			flat =1;
 		}
-	</c:forEach>
+		if('11'==id){
+			if(flat == 0){
+				$("#"+'S').attr("class","changToRed");
+				$("#price").html("￥"+'14');
+				$("#mPrice").html("￥"+'18');
+			}else{
+				$("#"+'S').attr("class","changToWhite");
+			}
+			flat =1;
+		}
 }
 function sizeToRed(target,id){
 	var cc = $(target).attr("class");
@@ -84,13 +87,14 @@ function sizeToRed(target,id){
 		}
 	});
 	$(target).attr("class","changToRed");
-	<c:forEach items="${ skus }" var="sku">
-	if('${sku.colorId}'==colorId && '${sku.size}'==id){
-		$("#price").html("￥"+'${sku.price}');
-		$("#mPrice").html("￥"+'${sku.marketPrice}');
-		skuId=${sku.id};
+	if('10'==colorId && 'M'==id){
+		$("#price").html("￥"+'12');
+		$("#mPrice").html("￥"+'21');
 	}
-</c:forEach>
+	if('11'==colorId && 'S'==id){
+		$("#price").html("￥"+'14');
+		$("#mPrice").html("￥"+'18');
+	}
 }
 //加入购物车
 function addCart(){
@@ -98,7 +102,7 @@ function addCart(){
 }
 //立即购买
 function buy(){
-	window.location.href='/shopping/buyerCart.shtml?skuId='+skuId+'&amount='+$("#num").val();
+	window.location.href='cart.jsp';
 }
 </script>
 </head>
@@ -192,21 +196,20 @@ function buy(){
 <div class="w ofc mt">
 	<div class="l">
 		<div class="showPro">
-			<div class="big"><a id="showImg" class="cloud-zoom" href="${ product.img.allUrl }" rel="adjustX:10,adjustY:-1"><img alt="" src="${ product.img.allUrl }"></a></div>
+			<div class="big"><a id="showImg" class="cloud-zoom" href="http://localhost:8088/img-web/upload/20170112190049893160.jpg" rel="adjustX:10,adjustY:-1"><img alt="" src="http://localhost:8088/img-web/upload/20170112190049893160.jpg"></a></div>
 		</div>
 	</div>
 	<div class="r" style="width: 640px">
 		<ul class="uls form">
-			<li><h2>${ product.name }</h2></li>
+			<li><h2>大家的瑜伽服</h2></li>
 			<li><label>巴  巴 价：</label><span class="word"><b class="f14 red mr" id="price">￥128.00</b>(市场价:<del id="mPrice">￥150.00</del>)</span></li>
 			<li><label>商品评价：</label><span class="word"><span class="val_no val3d4" title="4分">4分</span><var class="blue">(已有888人评价)</var></span></li>
 			<li><label>运　　费：</label><span class="word">10元</span></li>
 			<li><label>库　　存：</label><span class="word" id="stockInventory">100</span><span class="word" >件</span></li>
 			<li><label>选择颜色：</label>
 				<div id="colors" class="pre spec">
-					<c:forEach items="${ colors }" var="color">
-						<a onclick="colorToRed(this,'${color.id }')" href="javascript:void(0)" title="${ color.name }" class="changToWhite"><img width="25" height="25" data-img="1" src="/res/img/pic/ppp00.jpg" alt="${ color.name } "><i>${ color.name }</i></a>
-					</c:forEach>
+						<a onclick="colorToRed(this,'10')" href="javascript:void(0)" title="大红" class="changToWhite"><img width="25" height="25" data-img="1" src="/res/img/pic/ppp00.jpg" alt="大红 "><i>大红</i></a>
+						<a onclick="colorToRed(this,'11')" href="javascript:void(0)" title="墨绿" class="changToWhite"><img width="25" height="25" data-img="1" src="/res/img/pic/ppp00.jpg" alt="墨绿 "><i>墨绿</i></a>
 				</div>
 			</li>
 			<li id="sizes"><label>尺　　码：</label>
@@ -354,7 +357,7 @@ function buy(){
 			<a href="javascript:void(0);" title="包装清单" rel="#detailTab3">包装清单</a></em><cite></cite></h2>
 		<div class="box bg_white ofc">
 			<div id="detailTab1" class="detail">
-				${ product.description }
+				<p><img src="http://localhost:8088/img-web/upload/20170112190057656622.jpg" width="750" height="617" alt="" /></p>
 			</div>
 			
 			<div id="detailTab2" style="display:none">
@@ -370,7 +373,7 @@ function buy(){
 			<div id="detailTab3" class="detail" style="display:none">
 
 	<pre class="f14">
-		${ product.packageList }
+		衣服*1
 	</pre>
 
 			</div>

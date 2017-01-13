@@ -1,3 +1,4 @@
+
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -46,7 +47,7 @@ function pricefq(p){
 }
 //登陆
 function login(){
-	window.location.href = "../buyer/login.jsp";
+	window.location.href = "/shopping/login.shtml?returnUrl="+encodeURIComponent(window.location.href);
 }
 </script>
 </head>
@@ -59,11 +60,15 @@ function login(){
 	</p>
 	<ul class="r uls">
 	<li class="dev">您好,欢迎来到新巴巴运动网！</li>
-	<li class="dev"><a href="javascript:void(0)" onclick="login()"  title="登陆">[登陆]</a></li>
-	<li class="dev"><a href="javascript:void(0)" onclick="register()" title="免费注册">[免费注册]</a></li>
-	<li class="dev"><a href="javascript:void(0)" onclick="logout()" title="退出">[退出]</a></li>
-	<li class="dev"><a href="javascript:void(0)" onclick="myOrder()" title="我的订单">我的订单</a></li>
-	<li class="dev"><a href="#" title="在线客服">在线客服</a></li>
+	<c:if test="${ !isLogin }">
+		<li class="dev"><a href="javascript:void(0)" onclick="login()"  title="登陆">[登陆]</a></li>
+		<li class="dev"><a href="javascript:void(0)" onclick="register()" title="免费注册">[免费注册]</a></li>
+		<li class="dev"><a href="javascript:void(0)" onclick="logout()" title="退出">[退出]</a></li>
+	</c:if>
+	<c:if test="${ isLogin }">
+		<li class="dev"><a href="javascript:void(0)" onclick="myOrder()" title="我的订单">我的订单</a></li>
+		<li class="dev"><a href="#" title="在线客服">在线客服</a></li>
+	</c:if>
 	<li class="dev after"><a href="#" title="English">English</a></li>
 	</ul>
 </div></div>
@@ -355,7 +360,7 @@ function login(){
 						<a href="javascript:void(0);" title="瑜伽服" onclick="window.open('/product/display/detail.shtml?id=${product.id}')" class="pic"><img src="${ product.img.allUrl}" alt="瑜伽服" /></a>
 						<dl>
 							<!-- dt 10个文字+... -->
-							<dt><a href="productDetail.jsp" title="依琦莲2014瑜伽服套装新款" target="_blank">${ product.name }</a></dt>
+							<dt><a href="javascript:void(0);" title="${ product.name }" onclick="window.open('/html/product/${product.id}.html')">${ product.name }</a></dt>
 							<!-- dt 25个文字+... -->
 							<dd class="h40">${ product.name }</dd>
 							<dd class="orange">${ product.price }</dd>

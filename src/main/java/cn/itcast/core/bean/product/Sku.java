@@ -99,8 +99,22 @@ public class Sku implements Serializable {
      */
     private Color color;
     
+    /**
+     * 商品
+     */
+    private Product product;
+    
+    
 
-    public Color getColor() {
+    public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public Color getColor() {
 		return color;
 	}
 
