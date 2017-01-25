@@ -36,7 +36,9 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
-			<bean class="cn.itcast.core.web.FrontInteceptor"></bean>
+			<bean class="cn.itcast.core.web.FrontInteceptor">
+				<property name="adminId" value="1"/>
+			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 	

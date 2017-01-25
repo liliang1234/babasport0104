@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import cn.itcast.core.Constants;
 import cn.itcast.core.bean.BuyerCart;
 import cn.itcast.core.bean.BuyerItem;
+import cn.itcast.core.bean.order.Order;
 import cn.itcast.core.bean.product.Sku;
 import cn.itcast.core.bean.user.Addr;
 import cn.itcast.core.bean.user.Buyer;
 import cn.itcast.core.dao.product.SkuDao;
+import cn.itcast.core.service.order.OrderService;
 import cn.itcast.core.service.product.SkuService;
 import cn.itcast.core.service.user.AddrService;
 
@@ -42,6 +44,8 @@ public class CarController {
 	private SkuService skuService;
 	@Autowired
 	private AddrService addrService;
+	@Autowired
+	private OrderService orderService;
 
 	/**
 	 * 新增或者追加购物车
@@ -161,7 +165,8 @@ public class CarController {
 	 * 结算
 	 */
 	@RequestMapping(value = "/buyer/trueBuy.shtml")
-	public String trueBuy(HttpServletRequest request,HttpServletResponse response,Model model) {
+	public String trueBuy(HttpServletRequest request,
+			HttpServletResponse response, Model model) {
 		BuyerCart buyerCart = null;
 		ObjectMapper om = new ObjectMapper();
 		// 不可空
@@ -211,11 +216,54 @@ public class CarController {
 		} else {
 			return "redirect:/shopping/buyerCart.shtml";
 		}
-		Buyer buyer = (Buyer) request.getSession().getAttribute(Constants.BUYER_NAME);
+		Buyer buyer = (Buyer) request.getSession().getAttribute(
+				Constants.BUYER_NAME);
 		Addr addr = addrService.selectAddrByUserNmae(buyer.getUsername());
 		model.addAttribute("addr", addr);
-		
-		
+
 		return "product/productOrder";
+	}
+
+	@RequestMapping(value = "/buyer/confirmOrder.shtml")
+	public String confirmOrder(Model model, Order order,
+			HttpServletRequest request) {
+		// 订单保存
+		// 订单主表
+		// 订单字表
+
+		// 清空购物车
+		BuyerCart buyerCart = null;
+		ObjectMapper om = new ObjectMapper();
+		// 不可空
+		om.setSerializationInclusion(Inclusion.NON_NULL);
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null && cookies.length > 0) {
+			for (Cookie cookie : cookies) {
+				if (Constants.BUYER_CART.equals(cookie.getName())) {
+					try {
+						buyerCart = om.readValue(cookie.getValue(),
+								BuyerCart.class);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
+		}
+		// 最后加载数据
+		if (buyerCart.getBuyerItems().size() > 0) {
+			for (BuyerItem item : buyerCart.getBuyerItems()) {
+				Sku sku = skuService.selectSkuById(item.getSku().getId());
+				item.setSku(sku);
+			}
+		}
+		Buyer buyer = (Buyer) request.getSession().getAttribute(
+				Constants.BUYER_NAME);
+		order.setBuyerId(buyer.getUsername());
+		orderService.addOrder(order, buyerCart);
+
+		return "product/confirmOrder";
+
 	}
 }

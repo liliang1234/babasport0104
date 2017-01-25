@@ -52,7 +52,7 @@ public class Order implements Serializable {
     /**
      * 订单状态 0:提交订单 1:仓库配货 2:商品出库 3:等待收货 4:完成 5待退货 6已退货
      */
-    private Boolean orderState;
+    private Integer orderState;
 
     /**
      * 订单生成时间
@@ -143,15 +143,15 @@ public class Order implements Serializable {
         this.isPaiy = isPaiy;
     }
 
-    public Boolean getOrderState() {
-        return orderState;
-    }
+    public Integer getOrderState() {
+		return orderState;
+	}
 
-    public void setOrderState(Boolean orderState) {
-        this.orderState = orderState;
-    }
+	public void setOrderState(Integer orderState) {
+		this.orderState = orderState;
+	}
 
-    public Date getCreateDate() {
+	public Date getCreateDate() {
         return createDate;
     }
 
