@@ -114,7 +114,6 @@ public class ProductController {
 	@RequestMapping(value = "/product/add.do")
 	public String add(Product product, Model model) {
 		productService.addProduct(product);
-		;
 		return "redirect:/product/list.do";
 	}
 

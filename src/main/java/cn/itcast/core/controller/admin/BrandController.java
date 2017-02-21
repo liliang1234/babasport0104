@@ -1,8 +1,8 @@
 package cn.itcast.core.controller.admin;
 
 
-import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +23,13 @@ public class BrandController {
 
 	@Autowired
 	BrandService brandService;
+	protected Logger logger = LoggerFactory.getLogger(BrandController.class);
 	@RequestMapping(value="/brand/list.do")
 	public String list(Integer pageNo , String name,Integer isDisPlay,Model model){
 		BrandQuery bq = new BrandQuery();
 		//参数的容器
 		StringBuilder params = new StringBuilder();
+		logger.info("参数的容器为=======");
 		if(name != null ){
 			bq.setName(name);
 			params.append("name=").append(name);

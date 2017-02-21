@@ -13,17 +13,17 @@ public class TestSolr {
 
 	@Test
 	public void testAdd() throws Exception{
-		String baseURL = "http://192.168.40.133:8080/solr";
+		String baseURL = "http://192.168.40.128:8080/solr";
 		SolrServer solrServer = new HttpSolrServer(baseURL);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.setField("id", 1);
-		doc.setField("name", "瑜伽服");
+		doc.setField("id", 3);
+		doc.setField("name", "瑜伽服敷敷");
 		solrServer.add(doc);
 		solrServer.commit();
 	}
 	@Test
 	public void select() throws Exception{
-		String baseURL = "http://192.168.40.133:8080/solr";
+		String baseURL = "http://192.168.40.128:8080/solr";
 		SolrServer solrServer = new HttpSolrServer(baseURL);
 		SolrQuery params = new SolrQuery();
 		params.set("q", "*:*");

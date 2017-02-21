@@ -14,7 +14,7 @@
 	<!-- 配置Solr客户端连接服务器   @Autoward solrServer-->
 	<bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
 		<constructor-arg>
-			<value>http://192.168.40.133:8080/solr</value>
+			<value>http://192.168.40.128:8080/solr</value>
 		</constructor-arg>
 	</bean>
 </beans>
